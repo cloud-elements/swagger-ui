@@ -14,7 +14,7 @@ window.SwaggerUi = Backbone.Router.extend({
   // SwaggerUi accepts all the same options as SwaggerApi
   initialize: function(options) {
     options = options || {};
-    
+    SwaggerUi.options = options;
     if (options.defaultModelRendering !== 'model') {
       options.defaultModelRendering = 'schema';
     }
@@ -141,6 +141,12 @@ window.SwaggerUi = Backbone.Router.extend({
       router: this
     }).render();
     this.showMessage();
+
+    //Changes for backward compatability
+    if(this.options.docExpansion === null && this.options.expansion !== null) {
+        this.options.docExpansion = this.options.expansion;
+    }
+
     switch (this.options.docExpansion) {
       case 'full':
         this.expandAll(); break;
