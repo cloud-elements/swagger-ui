@@ -25676,7 +25676,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       $('.response_throbber', $(this.el)).show();
 
       //Pre request callback function before making the request
-      if(SwaggerUi.options.onPreRequest !== null) {
+      if(SwaggerUi.options.onPreRequest !== null && SwaggerUi.options.onPreRequest !== undefined) {
           SwaggerUi.options.onPreRequest(this.model, map, opts);
       }
 
@@ -26019,7 +26019,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
     var response_body_el = $('.response_body', $(this.el))[0];
 
-    if(SwaggerUi.options.onPostRequest !== null) {
+    if(SwaggerUi.options.onPostRequest !== null && SwaggerUi.options.onPostRequest !== undefined) {
         SwaggerUi.options.onPostRequest(code, content, contentType, headers, pre, response_body, url);
     }
 
