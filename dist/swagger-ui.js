@@ -25378,6 +25378,11 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     if (!isMethodSubmissionSupported) {
       this.model.isReadOnly = true;
     }
+    //Support Readonly at the parent level to hide Try It Out
+    if(SwaggerUi.options.isReadOnly) {
+        this.model.isReadOnly = true;
+    }
+
     this.model.description = this.model.description || this.model.notes;
     this.model.oauth = null;
     modelAuths = this.model.authorizations || this.model.security;
@@ -26326,6 +26331,7 @@ SwaggerUi.Views.SignatureView = Backbone.View.extend({
 
     $(this.el).html(Handlebars.templates.signature(this.model));
     $('.description', $(this.el)).context.firstload = true;
+      //Commenting out to always default to description
 //    if (this.model.defaultRendering === 'model') {
       this.switchToDescription();
 //    } else {
