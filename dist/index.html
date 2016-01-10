@@ -77,7 +77,12 @@
         sampleModel: true,
         defaultModelRendering: 'schema',
         showRequestHeaders: false,
-        isReadOnly: true
+        onPostRequest: function (code, content, contentType, headers, pre, response_body, url) {
+          console.log('In Post request');
+        },
+        onPreRequest: function (model, map, opts){
+          console.log('In Pre request' + model);
+        }
       });
 
       function addApiKeyAuthorization(){

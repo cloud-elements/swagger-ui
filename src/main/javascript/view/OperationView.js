@@ -405,8 +405,8 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       $('.response_throbber', $(this.el)).show();
 
       //Pre request callback function before making the request
-      if(SwaggerUi.options.preRequest !== null) {
-          SwaggerUi.options.preRequest(this.model, map, opts);
+      if(SwaggerUi.options.onPreRequest !== null) {
+          SwaggerUi.options.onPreRequest(this.model, map, opts);
       }
 
       if (isFileUpload) {
@@ -748,8 +748,8 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
 
     var response_body_el = $('.response_body', $(this.el))[0];
 
-    if(SwaggerUi.options.postRequest !== null) {
-        SwaggerUi.options.postRequest(code, content, contentType, headers, pre, response_body, url);
+    if(SwaggerUi.options.onPostRequest !== null) {
+        SwaggerUi.options.onPostRequest(code, content, contentType, headers, pre, response_body, url);
     }
 
       // only highlight the response if response is less than threshold, default state is highlight response
