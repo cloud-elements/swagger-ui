@@ -28,7 +28,7 @@ SwaggerUi.Views.ParameterView = Backbone.View.extend({
 
     this.model.type = type;
     this.model.paramType = this.model.in || this.model.paramType;
-    this.model.isBody = this.model.paramType === 'body' || this.model.in === 'body';
+    this.model.isBody = this.model.paramType === 'body' || this.model.in === 'body' || this.model.paramType === 'form' || this.model.in === 'form';
     this.model.isFile = type && type.toLowerCase() === 'file';
 
     // Allow for default === false

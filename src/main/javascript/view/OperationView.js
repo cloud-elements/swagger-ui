@@ -10,6 +10,7 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     'click .toggleOperation'  : 'toggleOperationContent',
     'mouseenter .api-ic'      : 'mouseEnter',
     'dblclick .curl'          : 'selectText',
+    'click a.responsemessages-link': 'toggleResponseMessages' //Handle setting the click function to responsemessages-click to show and hide responsemessages
   },
 
   initialize: function(opts) {
@@ -46,6 +47,23 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
           selection.removeAllRanges();
           selection.addRange(range);
       }
+  },
+
+  toggleResponseMessages: function(event) {
+      if (event !== null) {
+          event.preventDefault();
+      }
+
+      var responseVisible = $('.responsemessages', $(this.el)).is(':visible');
+      if(responseVisible === true) {
+          $('.responsemessages-downarrow', $(this.el)).hide();
+          $('.responsemessages-rightarrow', $(this.el)).show();
+      } else {
+          $('.responsemessages-downarrow', $(this.el)).show();
+          $('.responsemessages-rightarrow', $(this.el)).hide();
+      }
+
+      $('.responsemessages', $(this.el)).toggle();
   },
 
   mouseEnter: function(e) {
@@ -89,6 +107,11 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     if (!isMethodSubmissionSupported) {
       this.model.isReadOnly = true;
     }
+    //Support Readonly at the parent level to hide Try It Out
+    if(SwaggerUi.options.isReadOnly) {
+        this.model.isReadOnly = true;
+    }
+
     this.model.description = this.model.description || this.model.notes;
     this.model.oauth = null;
     modelAuths = this.model.authorizations || this.model.security;
@@ -380,6 +403,12 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
       opts.responseContentType = $('div select[name=responseContentType]', $(this.el)).val();
       opts.requestContentType = $('div select[name=parameterContentType]', $(this.el)).val();
       $('.response_throbber', $(this.el)).show();
+
+      //Pre request callback function before making the request
+      if(SwaggerUi.options.onPreRequest !== null) {
+          SwaggerUi.options.onPreRequest(this.model, map, opts);
+      }
+
       if (isFileUpload) {
         $('.request_url', $(this.el)).html('<pre></pre>');
         $('.request_url pre', $(this.el)).text(this.invocationUrl);
@@ -718,7 +747,12 @@ SwaggerUi.Views.OperationView = Backbone.View.extend({
     }
 
     var response_body_el = $('.response_body', $(this.el))[0];
-    // only highlight the response if response is less than threshold, default state is highlight response
+
+    if(SwaggerUi.options.onPostRequest !== null) {
+        SwaggerUi.options.onPostRequest(code, content, contentType, headers, pre, response_body, url);
+    }
+
+      // only highlight the response if response is less than threshold, default state is highlight response
     if (opts.highlightSizeThreshold && typeof response.data !== 'undefined' && response.data.length > opts.highlightSizeThreshold) {
       return response_body_el;
     } else {

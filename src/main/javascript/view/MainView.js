@@ -115,6 +115,15 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
       }
       resource.id = id;
       resources[id] = resource;
+
+      //Decide if the resource has Model Schema or a Sample model schema
+        //TODO decide based on resource
+//      if(this.isSampleModel(resource)) {
+//
+//      } else {
+//
+//      }
+
       this.addResource(resource, this.model.auths);
     }
 
@@ -126,6 +135,14 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
     return this;
   },
 
+  isSampleModel: function(resource) {
+      var sModels = SwaggerUi.options.sampleModels;
+      if(sModels !== null && sModels !== undefined && sModels[resource.name] !== null && sModels[resource.name] === true) {
+          return true;
+      }
+      return false;
+  },
+
   addResource: function(resource, auths){
     // Render a resource and add it to resources li
     resource.id = resource.id.replace(/\s/g, '_');
@@ -133,6 +150,25 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
     // Make all definitions available at the root of the resource so that they can
     // be loaded by the JSonEditor
     resource.definitions = this.model.definitions;
+
+    var dParams = SwaggerUi.options.defaultParams;
+    if(dParams !== null && dParams !== undefined && dParams.length > 0) {
+      var swaggerOpts = resource.operationsArray;
+      for(var int = 0; int < dParams.length; int++) {
+          var dp = dParams[int];
+          if(swaggerOpts !== null && swaggerOpts !== undefined) {
+              for(var int2 = 0; int2 < swaggerOpts.length; int2++) {
+                  if(resource.operationsArray[int2].parameters !== null && resource.operationsArray[int2].parameters !== undefined) {
+                      for(var int3 = 0; int3 < resource.operationsArray[int2].parameters.length; int3++) {
+                          if(resource.operationsArray[int2].parameters[int3].name === dp.paramKey) {
+                              resource.operationsArray[int2].parameters[int3].defaultValue = dp.defaultValue;
+                          }
+                      }
+                  }
+              }
+          }
+      }
+    }
 
     var resourceView = new SwaggerUi.Views.ResourceView({
       model: resource,

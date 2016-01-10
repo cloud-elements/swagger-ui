@@ -94,7 +94,16 @@
           {{/if}}
           {{#if responseMessages}}
           <div style='margin:0;padding:0;display:inline'></div>
-          <h4 data-sw-translate>Response Messages</h4>
+
+          <a class='responsemessages-link' href='#' title='Click to view'>
+            <h4 data-sw-translate>
+                <span class='responsemessages-rightarrow' style='width: 0;height: 0; border-top: 5px solid transparent; border-left: 10px solid; border-bottom: 5px solid transparent; display: block; float: left; margin-right: 5px;'></span>
+                <span class='responsemessages-downarrow'  style='width: 0;height: 0; border-top: 10px solid; border-left: 5px solid transparent; border-right: 5px solid transparent; display: none; float: left; margin-right: 5px;'></span>
+                Response Messages
+            </h4>
+          </a>
+          <div class='responsemessages' style='display:none'>
+
           <table class='fullwidth'>
             <thead>
             <tr>
@@ -106,7 +115,7 @@
             </thead>
             <tbody class="operation-status">
             </tbody>
-          </table>
+          </table></div>
           {{/if}}
           {{#if isReadOnly}}
           {{else}}
