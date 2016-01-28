@@ -14,6 +14,12 @@ SwaggerUi.Views.MainView = Backbone.View.extend({
 
     this.router = opts.router;
 
+    if ('showInfo' in opts.swaggerOptions) {
+        this.model.showInfo = opts.swaggerOptions.showInfo;
+    } else {
+        this.model.showInfo = true;
+    }
+
     // Sort APIs
     if (opts.swaggerOptions.apisSorter) {
       sorterOption = opts.swaggerOptions.apisSorter;
